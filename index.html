@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ CYBER LOCK BREACH 2.0 ⚡ - Professional Code Cracking Game</title>
+    
+    <!-- SEO Meta -->
+    <meta name="description" content="Professional 4-digit code cracking game with difficulty levels, timer mode, and leaderboards">
+    <meta name="keywords" content="game, puzzle, code-breaking, logic game, cyberpunk, leaderboard">
+    <meta name="author" content="Your Name">
+    
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="CYBER LOCK BREACH 2.0">
+    <meta property="og:description" content="Crack the code in this professional puzzle game">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/preview.png">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/themes.css">
+</head>
+<body class="cyber-theme">
+    <!-- Scanlines Effect -->
+    <div class="scanlines"></div>
+    
+    <!-- Matrix Background -->
+    <div class="matrix-bg"></div>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Header with Theme Toggle -->
+        <header class="header">
+            <div class="logo-container">
+                <h1 class="glitch-text" data-text="CYBER LOCK">CYBER LOCK</h1>
+                <span class="version">v2.0</span>
+            </div>
+            
+            <div class="header-controls">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <!-- Stats Button -->
+                <button class="stats-toggle" id="statsToggle" aria-label="View stats">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Game Configuration Panel -->
+        <section class="config-panel" id="configPanel">
+            <h2 class="panel-title">⚙️ CONFIGURATION</h2>
+            
+            <div class="config-grid">
+                <!-- Difficulty Selector -->
+                <div class="config-item">
+                    <label class="config-label">
+                        <i class="fas fa-skull"></i> DIFFICULTY
+                    </label>
+                    <div class="difficulty-selector">
+                        <button class="difficulty-btn active" data-difficulty="medium" onclick="Game.setDifficulty('medium')">
+                            <span class="difficulty-name">MEDIUM</span>
+                            <span class="difficulty-desc">15 attempts, 3 hints</span>
+                        </button>
+                        <button class="difficulty-btn" data-difficulty="easy" onclick="Game.setDifficulty('easy')">
+                            <span class="difficulty-name">EASY</span>
+                            <span class="difficulty-desc">6 attempts, 5 hints</span>
+                        </button>
+                        <button class="difficulty-btn" data-difficulty="hard" onclick="Game.setDifficulty('hard')">
+                            <span class="difficulty-name">HARD</span>
+                            <span class="difficulty-desc">15 attempts, no hints</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Timer Toggle -->
+                <div class="config-item">
+                    <label class="config-label">
+                        <i class="fas fa-clock"></i> TIMER MODE
+                    </label>
+                    <div class="timer-selector">
+                        <button class="timer-btn active" onclick="Game.setTimerMode(false)">
+                            <i class="fas fa-infinity"></i> UNLIMITED
+                        </button>
+                        <button class="timer-btn" onclick="Game.setTimerMode(true, 60)">
+                            <i class="fas fa-hourglass-half"></i> 60 SEC
+                        </button>
+                        <button class="timer-btn" onclick="Game.setTimerMode(true, 120)">
+                            <i class="fas fa-hourglass-start"></i> 120 SEC
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Stats Bar -->
+        <section class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-icon"><i class="fas fa-bolt"></i></span>
+                <span class="stat-label">ATTEMPTS</span>
+                <span class="stat-value" id="attemptsDisplay">0/15</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon"><i class="fas fa-hourglass"></i></span>
+                <span class="stat-label">REMAINING</span>
+                <span class="stat-value" id="remainingDisplay">15</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon"><i class="fas fa-lightbulb"></i></span>
+                <span class="stat-label">HINTS</span>
+                <span class="stat-value" id="hintsDisplay">3</span>
+            </div>
+            <div class="stat-item timer-stat" id="timerStat">
+                <span class="stat-icon"><i class="fas fa-clock"></i></span>
+                <span class="stat-label">TIME</span>
+                <span class="stat-value" id="timerDisplay">--:--</span>
+            </div>
+        </section>
+
+        <!-- Main Game Panel -->
+        <section class="game-panel">
+            <!-- Target Code Display -->
+            <div class="target-panel">
+                <div class="target-label">TARGET SEQUENCE</div>
+                <div class="target-code" id="secretDisplay">????</div>
+                <div class="target-progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-panel">
+                <div class="input-wrapper">
+                    <input type="text" 
+                           id="guessInput" 
+                           maxlength="4" 
+                           placeholder="0000"
+                           class="cyber-input"
+                           inputmode="numeric"
+                           autocomplete="off"
+                           aria-label="Enter 4-digit code">
+                    
+                    <div class="input-buttons">
+                        <button class="action-btn primary" onclick="UI.makeGuess()" id="guessBtn">
+                            <i class="fas fa-key"></i> BREACH
+                        </button>
+                        <button class="action-btn secondary" onclick="UI.useHint()" id="hintBtn">
+                            <i class="fas fa-lightbulb"></i> HINT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="tips-grid">
+                    <div class="tip">
+                        <span class="tip-badge exact">✅</span>
+                        <span class="tip-text">Exact match</span>
+                    </div>
+                    <div class="tip">
+                        <span class="tip-badge partial">🔄</span>
+                        <span class="tip-text">Wrong position</span>
+                    </div>
+                    <div class="tip">
+                        <span class="tip-badge miss">❌</span>
+                        <span class="tip-text">No match</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message Display -->
+            <div class="message-panel" id="messagePanel">
+                <span class="prompt">$></span>
+                <span class="message" id="messageText">System ready. Enter configuration...</span>
+                <span class="cursor">_</span>
+            </div>
+        </section>
+
+        <!-- Tabs: History & Leaderboard -->
+        <section class="tabs-panel">
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="UI.switchTab('history')">
+                    <i class="fas fa-history"></i> ATTEMPT HISTORY
+                </button>
+                <button class="tab-btn" onclick="UI.switchTab('leaderboard')">
+                    <i class="fas fa-trophy"></i> LEADERBOARD
+                </button>
+                <button class="tab-btn" onclick="UI.switchTab('achievements')">
+                    <i class="fas fa-medal"></i> ACHIEVEMENTS
+                </button>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content active" id="historyTab">
+                <div class="history-header">
+                    <div>#</div>
+                    <div>CODE</div>
+                    <div>EXACT</div>
+                    <div>PARTIAL</div>
+                    <div>TIME</div>
+                    <div>STATUS</div>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="empty-state">
+                        <i class="fas fa-terminal"></i>
+                        <p>No attempts yet. Start breaching!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Tab -->
+            <div class="tab-content" id="leaderboardTab">
+                <div class="leaderboard-filters">
+                    <select id="difficultyFilter" onchange="Leaderboard.updateDisplay()" class="filter-select">
+                        <option value="all">All Difficulties</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                
+                <div class="leaderboard-header">
+                    <div>RANK</div>
+                    <div>PLAYER</div>
+                    <div>SCORE</div>
+                    <div>ATTEMPTS</div>
+                    <div>TIME</div>
+                    <div>DIFFICULTY</div>
+                </div>
+                <div class="leaderboard-list" id="leaderboardList">
+                    <div class="empty-state">
+                        <i class="fas fa-trophy"></i>
+                        <p>No scores yet. Be the first!</p>
+                    </div>
+                </div>
+                
+                <div class="leaderboard-controls">
+                    <button class="action-btn secondary" onclick="Leaderboard.clearAll()">
+                        <i class="fas fa-trash"></i> CLEAR ALL
+                    </button>
+                </div>
+            </div>
+
+            <!-- Achievements Tab -->
+            <div class="tab-content" id="achievementsTab">
+                <div class="achievements-grid" id="achievementsList">
+                    <!-- Achievements will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Control Buttons -->
+        <section class="control-panel">
+            <button class="control-btn" onclick="UI.newGame()">
+                <i class="fas fa-redo-alt"></i> NEW GAME
+            </button>
+            <button class="control-btn" onclick="UI.saveScore()" id="saveScoreBtn">
+                <i class="fas fa-save"></i> SAVE SCORE
+            </button>
+            <button class="control-btn" onclick="UI.toggleSound()" id="soundBtn">
+                <i class="fas fa-volume-up"></i> SOUND
+            </button>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2024 CYBER LOCK BREACH v2.0 | Professional Code Cracking Game</p>
+            <div class="social-links">
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="Portfolio"><i class="fas fa-globe"></i></a>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal" id="scoreModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-trophy"></i> SAVE YOUR SCORE</h3>
+            <input type="text" id="playerName" placeholder="ENTER YOUR NAME" maxlength="20">
+            <div class="modal-buttons">
+                <button onclick="Leaderboard.saveScore()" class="action-btn primary">SAVE</button>
+                <button onclick="UI.closeModal()" class="action-btn secondary">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script src="js/leaderboard.js"></script>
+    <script src="js/themes.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+    
+    <!-- Initialize App -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize all modules
+            Game.init();
+            UI.init();
+            Leaderboard.init();
+            Themes.init();
+            
+            console.log('CYBER LOCK BREACH 2.0 initialized');
+        });
+    </script>
+</body>
+</html>

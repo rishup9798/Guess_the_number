@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Theme System - Light/Dark/Cyber Toggle
+   ========================================================================== */
+
+:root {
+    /* Cyber Theme (Default) */
+    --cyber-bg: #0a0a0f;
+    --cyber-surface: #12121a;
+    --cyber-primary: #00ff88;
+    --cyber-secondary: #ff3366;
+    --cyber-accent: #ffdd00;
+    --cyber-text: #00ff88;
+    
+    /* Light Theme */
+    --light-bg: #f5f5f5;
+    --light-surface: #ffffff;
+    --light-primary: #0066cc;
+    --light-secondary: #ff5500;
+    --light-accent: #ffaa00;
+    --light-text: #222222;
+    
+    /* Dark Theme (Alternative) */
+    --dark-bg: #1a1a2e;
+    --dark-surface: #16213e;
+    --dark-primary: #0f3460;
+    --dark-secondary: #e94560;
+    --dark-accent: #533483;
+    --dark-text: #ffffff;
+}
+
+/* Theme Transitions */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body * {
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Cyber Theme (Default) */
+body.cyber-theme {
+    --bg-primary: var(--cyber-bg);
+    --bg-surface: var(--cyber-surface);
+    --text-primary: var(--cyber-primary);
+    --text-secondary: var(--cyber-secondary);
+    --text-accent: var(--cyber-accent);
+    --border-primary: var(--cyber-primary);
+    --border-secondary: var(--cyber-secondary);
+    --glow-color: var(--cyber-primary);
+}
+
+/* Light Theme */
+body.light-theme {
+    --bg-primary: var(--light-bg);
+    --bg-surface: var(--light-surface);
+    --text-primary: var(--light-primary);
+    --text-secondary: var(--light-secondary);
+    --text-accent: var(--light-accent);
+    --border-primary: var(--light-primary);
+    --border-secondary: var(--light-secondary);
+    --glow-color: var(--light-primary);
+}
+
+/* Dark Theme (Alternative) */
+body.dark-theme {
+    --bg-primary: var(--dark-bg);
+    --bg-surface: var(--dark-surface);
+    --text-primary: var(--dark-primary);
+    --text-secondary: var(--dark-secondary);
+    --text-accent: var(--dark-accent);
+    --border-primary: var(--dark-primary);
+    --border-secondary: var(--dark-secondary);
+    --glow-color: var(--dark-primary);
+}
+
+/* Theme-specific adjustments */
+.light-theme .scanlines {
+    opacity: 0.1;
+}
+
+.light-theme .glitch-text::before,
+.light-theme .glitch-text::after {
+    opacity: 0.5;
+}
+
+.dark-theme .cyber-input {
+    background: #0a0a1a;
+}
+
+/* Theme Toggle Button Animation */
+.theme-toggle i {
+    transition: transform 0.5s ease;
+}
+
+.theme-toggle:hover i {
+    transform: rotate(360deg);
+}
+
+/* Save theme preference indicator */
+.theme-saved {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--bg-surface);
+    border: 2px solid var(--border-primary);
+    padding: 10px 20px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s ease;
+    z-index: 10000;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
